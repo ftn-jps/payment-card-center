@@ -27,16 +27,22 @@ public class ProxyController {
 
 	@PostMapping("/amount/{amount}")
 	public ResponseEntity<Boolean> forwardTransaction(
-			@PathVariable double amount,
-			@RequestBody @Valid CardDetails cardDetails) {
-		Bank bank = bankService.findByIin(cardDetails.getPan().substring(0, 6));
+		@PathVariable double amount,
+		@RequestBody @Valid CardDetails cardDetails)
+	{
+		System.out.println("Getting bank by iin");
 
+		final Bank bank = bankService.findByIin(cardDetails.getPan().substring(0, 6));
+		System.out.println("Bank found! Bank " + bank.getUrl() + "matches the specified iin");
+
+		System.out.println("Starting transaction...");
 		ResponseEntity<Boolean> response =
 				restClient.postForEntity(
-						bank.getUrl() + "/api/transactions/amount/" + amount,
-						cardDetails,
-						Boolean.class);
+					bank.getUrl() + "/api/transactions/amount/" + amount,
+					cardDetails,
+					Boolean.class);
 
+		System.out.println("Transaction completed successefully");
 		return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
 	}
 

@@ -30,10 +30,12 @@ public class ProxyController {
 		@PathVariable double amount,
 		@RequestBody @Valid CardDetails cardDetails)
 	{
-		System.out.println("Getting bank by iin");
-
+		System.out.println("Getting bank by iin ");
 		final Bank bank = bankService.findByIin(cardDetails.getPan().substring(0, 6));
-		System.out.println("Bank found! Bank " + bank.getUrl() + "matches the specified iin");
+		System.out.println("Bank found! Bank " + bank.getUrl() + "matches the specified iin: " + bank.getIin());
+
+		System.out.println("Card number: " + bank.getIin() + " ******** " +
+			cardDetails.getPan().substring(cardDetails.getPan().length()-2));
 
 		System.out.println("Starting transaction...");
 		ResponseEntity<Boolean> response =
